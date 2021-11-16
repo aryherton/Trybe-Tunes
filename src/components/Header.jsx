@@ -33,28 +33,38 @@ export default class Header extends Component {
     }
     return (
       <header className="header" data-testid="header-component">
-        <div className="name-user">
-          <span data-testid="header-user-name">{ nome }</span>
-          <nav>
-            <ol>
-              <li>
-                <Link data-testid="link-to-search" to="/Search">Pesquisar</Link>
-              </li>
-              |
-              <li>
-                <Link data-testid="link-to-favorites" to="/Favorites">Favorito</Link>
-              </li>
-              |
-              <li>
-                <Link data-testid="link-to-profile" to="/Profile">Perfil</Link>
-              </li>
-              |
-              <li>
-                <Link to="/ProfileEdit">Perfil-Edit</Link>
-              </li>
-            </ol>
-          </nav>
+        <div className="div-user">
+          <span
+            data-testid="header-user-name"
+            className="header-user-span"
+          >
+            { nome }
+          </span>
         </div>
+        <nav className="header-ol-menu">
+          <ol className="header-ol">
+            <li>
+              <Link data-testid="link-to-search" to="/search">Pesquisar</Link>
+            </li>
+            |
+            <li>
+              <Link data-testid="link-to-favorites" to="/favorites">Favorito</Link>
+            </li>
+            |
+            <li>
+              <Link data-testid="link-to-profile" to="/profile">Perfil</Link>
+            </li>
+            |
+            <li>
+              <Link
+                to="/profile/edit"
+                data-testid="link-to-profile-edit"
+              >
+                Perfil-Edit
+              </Link>
+            </li>
+          </ol>
+        </nav>
       </header>
     );
   }

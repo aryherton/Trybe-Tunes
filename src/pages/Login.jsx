@@ -17,15 +17,12 @@ export default class Login extends Component {
     this.selectRender = this.selectRender.bind(this);
   }
 
-  setUser() {
-    this.setState({ checkRegister: true });
-    const { nome } = this.state;
-    const num = 1000;
-    setTimeout(() => {
-      createUser({ name: nome, email: '', image: '', description: '' });
-      this.setState({ redir: true });
-      this.setState({ checkRegister: false });
-    }, num);
+  async setUser() {
+    this.setState({ checkRegister: true }, async () => {
+      const { nome } = this.state;
+      await createUser({ name: nome, email: '', image: '', description: '' });
+      this.setState({ redir: true, checkRegister: false });
+    });
   }
 
   getInput(event) {
@@ -35,7 +32,7 @@ export default class Login extends Component {
 
   selectRender() {
     const { nome } = this.state;
-    const lengthName = 4;
+    const lengthName = 3;
     return (
       <div data-testid="page-login" id="page-login">
         <h1>Login</h1>
