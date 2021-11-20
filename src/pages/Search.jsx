@@ -13,7 +13,8 @@ export default class Search extends Component {
     this.state = {
       valueInput: '',
       nameArtist: '',
-      album: [],
+      album: '',
+      checkReturnAlbum: false,
       disabledButt: true,
       loading: false,
     };
@@ -66,29 +67,34 @@ export default class Search extends Component {
             Pesquisar
           </button>
         </form>
-        { this.getArtist() }
+        <div>{ this.getArtist() }</div>
         {
           (
             album.length > 0
-              ? <ListAlbum { ...this.state } />
-              : 'Nenhum álbum foi encontrado'
+              && <ListAlbum { ...this.state } />
           )
         }
+        <span>
+          { ((album.length === 0 && album !== '') && 'Nenhum álbum foi encontrado') }
+        </span>
       </div>
     );
   }
 
   async searchFunction() {
-    this.setState({ loading: true });
-
-    const num = 1000;
-    const { valueInput } = this.state;
-    const returnAlbum = await searchAlbumsAPI(valueInput);
-
-    setTimeout(() => {
+    this.setState({ loading: true }, async () => {
+      const { valueInput } = this.state;
+      const returnAlbum = await searchAlbumsAPI(valueInput);
       this.setState({ loading: false });
-    }, num);
-    this.setState({ nameArtist: valueInput, album: returnAlbum });
+      if (returnAlbum.length > 0) {
+        this.setState({
+          album: returnAlbum,
+          nameArtist: valueInput,
+        });
+      } else {
+        this.setState({ album: [], nameArtist: '' });
+      }
+    });
   }
 
   checkChar(event) {
