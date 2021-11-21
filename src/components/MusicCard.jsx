@@ -1,13 +1,40 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
+
 import Loading from './Loading';
 
 export default class MusicCard extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      arrFavorite: [],
+    };
+  }
+
+  componentDidMount() {
+    const ms = 10;
+    this.timerID = setInterval(
+      () => this.checkFavorite(),
+      ms,
+    );
+  }
+
+  checkFavorite = async () => {
+    let { arrFavorite } = this.state;
+    arrFavorite = await getFavoriteSongs();
+    if (arrFavorite) {
+      arrFavorite = arrFavorite.map((item) => item.trackId);
+      this.setState({ arrFavorite });
+    }
+  }
+
   selectRender() {
+    const { arrFavorite } = this.state;
     const {
       albuns,
       loading,
-      arrChecked,
       controlFavorite } = this.props;
     const [, ...arrNew] = albuns;
     if (albuns.length > 0 && !loading) {
@@ -29,7 +56,7 @@ export default class MusicCard extends Component {
                         value={ album.trackId }
                         data-testid={ `checkbox-music-${album.trackId}` }
                         onClick={ controlFavorite }
-                        checked={ arrChecked.includes(album.trackId.toString()) }
+                        checked={ arrFavorite.includes(album.trackId) }
                       />
                     </label>
                     <audio
@@ -62,5 +89,5 @@ export default class MusicCard extends Component {
 MusicCard.propTypes = {
   albuns: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
-  arrChecked: PropTypes.arrayOf(PropTypes.number),
+  arrFavorite: PropTypes.arrayOf(PropTypes.number),
 }.isRequired;

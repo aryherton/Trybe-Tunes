@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
-import { addSong, removeSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
@@ -16,10 +16,10 @@ export default class Album extends Component {
       artist: '',
       collection: '',
       loading: false,
-      arrChecked: [],
+      arrFavorite: [],
     };
 
-    this.getMusics = this.getMusics.bind(this);
+    this.getArrMusic = this.getArrMusic.bind(this);
     this.selectRender = this.selectRender.bind(this);
     this.addFavorite = this.addFavorite.bind(this);
     this.controlFavorite = this.controlFavorite.bind(this);
@@ -27,14 +27,14 @@ export default class Album extends Component {
   }
 
   componentDidMount() {
-    this.getMusics();
+    this.getArrMusic();
   }
 
-  async getMusics() {
+  async getArrMusic() {
     const { match: { params: { id } } } = this.props;
 
     const arrPromise = await getMusics(id);
-    // arrPromise = arrPromise.filter((e) => e.previewUrl);
+
     this.setState({
       albuns: arrPromise,
       artist: arrPromise[0].artistName,
@@ -43,11 +43,10 @@ export default class Album extends Component {
   }
 
   async controlFavorite(event) {
-    const { arrChecked } = this.state;
-
     await this.setState({ loading: true });
-
-    if (!arrChecked.includes(event.target.value)) {
+    let arrFavorite = await getFavoriteSongs();
+    arrFavorite = arrFavorite.map((item) => item.trackId);
+    if (!arrFavorite.includes(Number(event.target.value))) {
       this.addFavorite(event);
     } else {
       this.deleteFavorite(event);
@@ -55,10 +54,10 @@ export default class Album extends Component {
   }
 
   async addFavorite(event) {
-    const { arrChecked, albuns } = this.state;
+    const { arrFavorite, albuns } = this.state;
 
-    arrChecked.push(event.target.value);
-    this.setState({ arrChecked }, async () => {
+    arrFavorite.push(event.target.value);
+    this.setState({ arrFavorite }, async () => {
       albuns.forEach(async (album) => {
         if (album.trackId === Number(event.target.value)) {
           await addSong(album);
@@ -69,10 +68,10 @@ export default class Album extends Component {
   }
 
   async deleteFavorite(event) {
-    const { arrChecked, albuns } = this.state;
-    const newArr = arrChecked.filter((item) => item !== event.target.value);
+    const { arrFavorite, albuns } = this.state;
+    const newArr = arrFavorite.filter((item) => item !== event.target.value);
 
-    this.setState({ arrChecked: newArr }, async () => {
+    this.setState({ arrFavorite: newArr }, async () => {
       albuns.forEach(async (album) => {
         if (album.trackId === Number(event.target.value)) { await removeSong(album); }
       });
@@ -82,7 +81,7 @@ export default class Album extends Component {
 
   selectRender() {
     const { albuns, artist, collection } = this.state;
-    console.log(artist, collection);
+
     if (albuns.length > 0) {
       return (
         <div data-testid="page-album" id="pageAlgum">
