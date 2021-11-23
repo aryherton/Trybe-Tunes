@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
@@ -15,25 +16,29 @@ export default class Album extends Component {
       albuns: [],
       artist: '',
       collection: '',
+      arrObjFavorite: [],
       loading: false,
-      arrFavorite: [],
     };
 
     this.getArrMusic = this.getArrMusic.bind(this);
-    this.selectRender = this.selectRender.bind(this);
-    this.addFavorite = this.addFavorite.bind(this);
-    this.controlFavorite = this.controlFavorite.bind(this);
-    this.deleteFavorite = this.deleteFavorite.bind(this);
+    this.createArrObjFavorite = this.createArrObjFavorite.bind(this);
+    this.addAndRemovFavorite = this.addAndRemovFavorite.bind(this);
   }
 
   componentDidMount() {
     this.getArrMusic();
+    this.createArrObjFavorite();
+  }
+
+  componentDidUpdate() {
+    this.createArrObjFavorite();
   }
 
   async getArrMusic() {
     const { match: { params: { id } } } = this.props;
 
-    const arrPromise = await getMusics(id);
+    let arrPromise = await getMusics(id);
+    arrPromise = arrPromise.filter((objMusc) => objMusc.previewUrl);
 
     this.setState({
       albuns: arrPromise,
@@ -42,65 +47,55 @@ export default class Album extends Component {
     });
   }
 
-  async controlFavorite(event) {
-    await this.setState({ loading: true });
-    let arrFavorite = await getFavoriteSongs();
-    arrFavorite = arrFavorite.map((item) => item.trackId);
-    if (!arrFavorite.includes(Number(event.target.value))) {
-      this.addFavorite(event);
+  createArrObjFavorite = async () => {
+    let newArrFavor = await getFavoriteSongs();
+    if (!newArrFavor) {
+      newArrFavor = [];
+    }
+    this.setState({ arrObjFavorite: newArrFavor });
+  }
+
+  async addAndRemovFavorite(event) {
+    this.setState({ loading: true });
+    const { albuns } = this.state;
+    const musc = albuns
+    .filter((objMusc) => objMusc.trackId === Number(event.target.value));
+    if (event.target.checked) {
+      await addSong(musc[0]);
+      this.setState({ loading: false });
     } else {
-      this.deleteFavorite(event);
+      await removeSong(musc[0]);
+      this.setState({ loading: false });
     }
   }
 
-  async addFavorite(event) {
-    const { arrFavorite, albuns } = this.state;
+  // selectRender() {
 
-    arrFavorite.push(event.target.value);
-    this.setState({ arrFavorite }, async () => {
-      albuns.forEach(async (album) => {
-        if (album.trackId === Number(event.target.value)) {
-          await addSong(album);
-        }
-      });
-      this.setState({ loading: false });
-    });
-  }
-
-  async deleteFavorite(event) {
-    const { arrFavorite, albuns } = this.state;
-    const newArr = arrFavorite.filter((item) => item !== event.target.value);
-
-    this.setState({ arrFavorite: newArr }, async () => {
-      albuns.forEach(async (album) => {
-        if (album.trackId === Number(event.target.value)) { await removeSong(album); }
-      });
-      this.setState({ loading: false });
-    });
-  }
-
-  selectRender() {
-    const { albuns, artist, collection } = this.state;
-
-    if (albuns.length > 0) {
-      return (
-        <div data-testid="page-album" id="pageAlgum">
-          <Header />
-          <p data-testid="artist-name">{artist}</p>
-          <p data-testid="album-name">{collection}</p>
-          <MusicCard
-            {
-              ...this.state }
-            controlFavorite={ this.controlFavorite }
-          />
-        </div>
-      );
-    }
-    return <Loading />;
-  }
+  // }
 
   render() {
-    return this.selectRender();
+    const { albuns, artist, collection, arrObjFavorite, loading } = this.state;
+    // Com colaboração de Bruno Marques, turma-16-b.
+    return (
+      <>
+        <Header />
+        <div data-testid="page-album" id="pageAlgum">
+          <p data-testid="artist-name">{artist}</p>
+          <p data-testid="album-name">{collection}</p>
+          {!loading ? (
+          albuns.map((musc) => (
+            <div key={ musc.trackId }>
+              <MusicCard
+                checkedFavorite={ arrObjFavorite
+                  .some((item) => item.trackId === musc.trackId) }
+                { ...musc }
+                addAndRemovFavorite={ this.addAndRemovFavorite }
+              />
+            </div>)))
+          : (<Loading />)}
+        </div>
+      </>
+        );
   }
 }
 

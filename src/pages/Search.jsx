@@ -13,6 +13,7 @@ export default class Search extends Component {
     this.state = {
       valueInput: '',
       nameArtist: '',
+      collectionName: '',
       album: '',
       checkReturnAlbum: false,
       disabledButt: true,
@@ -26,7 +27,7 @@ export default class Search extends Component {
   }
 
   getArtist() {
-    const { nameArtist } = this.state;
+    const { nameArtist, collectionName } = this.state;
     if (nameArtist) {
       return (
         <div>
@@ -34,6 +35,7 @@ export default class Search extends Component {
             Resultado de álbuns de:
             {' '}
             { nameArtist }
+            { collectionName }
           </h2>
         </div>
       );
@@ -89,7 +91,8 @@ export default class Search extends Component {
       if (returnAlbum.length > 0) {
         this.setState({
           album: returnAlbum,
-          nameArtist: valueInput,
+          nameArtist: returnAlbum[0].artistName,
+          collectionName: returnAlbum[0].collectionName,
         });
       } else {
         this.setState({ album: [], nameArtist: '' });
