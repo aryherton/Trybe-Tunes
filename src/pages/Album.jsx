@@ -59,7 +59,7 @@ export default class Album extends Component {
     this.setState({ loading: true });
     const { albuns } = this.state;
     const musc = albuns
-    .filter((objMusc) => objMusc.trackId === Number(event.target.value));
+      .filter((objMusc) => objMusc.trackId === Number(event.target.value));
     if (event.target.checked) {
       await addSong(musc[0]);
       this.setState({ loading: false });
@@ -68,10 +68,6 @@ export default class Album extends Component {
       this.setState({ loading: false });
     }
   }
-
-  // selectRender() {
-
-  // }
 
   render() {
     const { albuns, artist, collection, arrObjFavorite, loading } = this.state;
@@ -82,20 +78,23 @@ export default class Album extends Component {
         <div data-testid="page-album" id="pageAlgum">
           <p data-testid="artist-name">{artist}</p>
           <p data-testid="album-name">{collection}</p>
-          {!loading ? (
-          albuns.map((musc) => (
-            <div key={ musc.trackId }>
-              <MusicCard
-                checkedFavorite={ arrObjFavorite
-                  .some((item) => item.trackId === musc.trackId) }
-                { ...musc }
-                addAndRemovFavorite={ this.addAndRemovFavorite }
-              />
-            </div>)))
-          : (<Loading />)}
+          {
+            !loading
+              ? (albuns.map((musc) => (
+                <div key={ musc.trackId }>
+                  <MusicCard
+                    checkedFavorite={
+                      arrObjFavorite.some((item) => item.trackId === musc.trackId)
+                    }
+                    { ...musc }
+                    addAndRemovFavorite={ this.addAndRemovFavorite }
+                  />
+                </div>)))
+              : (<Loading />)
+          }
         </div>
       </>
-        );
+    );
   }
 }
 
