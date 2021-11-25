@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 export default class ListAlbum extends Component {
   creatLiAlbuns = () => {
-    const { album } = this.props;
-    const liAlbuns = album.map((item, keyId) => (
+    const { listAlbum } = this.props;
+    const liAlbuns = listAlbum.map((item, keyId) => (
       <li key={ keyId }>
         <Link
           data-testid={ `link-to-album-${item.collectionId}` }
@@ -24,7 +24,7 @@ export default class ListAlbum extends Component {
 
   render() {
     return (
-      <section>
+      <section id="section-ListAlbum">
         <h1>Álbuns</h1>
         <ol>
           { this.creatLiAlbuns() }
@@ -35,5 +35,5 @@ export default class ListAlbum extends Component {
 }
 
 ListAlbum.propTypes = {
-  album: PropTypes.arrayOf(PropTypes.object),
+  listAlbum: PropTypes.arrayOf(PropTypes.object),
 }.isRequired;

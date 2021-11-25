@@ -82,6 +82,8 @@ export default class Album extends Component {
             !loading
               ? (albuns.map((musc) => (
                 <div key={ musc.trackId }>
+                  {/* <p data-testid="artist-name">{artist}</p>
+                  <p data-testid="album-name">{collection}</p> */}
                   <MusicCard
                     checkedFavorite={
                       arrObjFavorite.some((item) => item.trackId === musc.trackId)

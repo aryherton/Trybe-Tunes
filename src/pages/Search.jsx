@@ -13,43 +13,51 @@ export default class Search extends Component {
     this.state = {
       valueInput: '',
       nameArtist: '',
-      collectionName: '',
-      album: '',
-      checkReturnAlbum: false,
+      // collectionName: '',
+      album: [],
       disabledButt: true,
       loading: false,
     };
 
     this.checkChar = this.checkChar.bind(this);
     this.searchFunction = this.searchFunction.bind(this);
-    this.selectRender = this.selectRender.bind(this);
-    this.getArtist = this.getArtist.bind(this);
   }
 
-  getArtist() {
-    const { nameArtist, collectionName } = this.state;
-    if (nameArtist) {
-      return (
-        <div>
-          <h2>
-            Resultado de álbuns de:
-            {' '}
-            { nameArtist }
-            { collectionName }
-          </h2>
-        </div>
-      );
+  async searchFunction() {
+    this.setState({ loading: true }, async () => {
+      const { valueInput } = this.state;
+      const returnAlbum = await searchAlbumsAPI(valueInput);
+
+      if (returnAlbum.length > 0) {
+        this.setState({
+          album: returnAlbum,
+          nameArtist: returnAlbum[0].artistName,
+          // collectionName: returnAlbum[0].collectionName,
+          strAlertNotAlbum: '',
+        });
+      } else {
+        this.setState({
+          album: [],
+          nameArtist: '',
+          strAlertNotAlbum: 'Nenhum álbum foi encontrado' });
+      }
+    });
+    this.setState({ loading: false });
+  }
+
+  checkChar(event) {
+    const inptLength = event.target.value.length;
+
+    if (inptLength > 1) {
+      const inputChar = event.target.value;
+      this.setState({ valueInput: inputChar, disabledButt: false });
+    } else {
+      this.setState({ disabledButt: true });
     }
   }
 
-  selectRender() {
-    const { loading, disabledButt, album } = this.state;
-    if (loading) {
-      return (
-        <Loading />
-      );
-    }
-
+  render() {
+    const { album, nameArtist, loading, disabledButt, strAlertNotAlbum } = this.state;
     return (
       <div data-testid="page-search" id="pageSearch">
         <Header />
@@ -69,48 +77,23 @@ export default class Search extends Component {
             Pesquisar
           </button>
         </form>
-        <div>{ this.getArtist() }</div>
-        {
-          (
-            album.length > 0
-              && <ListAlbum { ...this.state } />
-          )
-        }
-        <span>
-          { ((album.length === 0 && album !== '') && 'Nenhum álbum foi encontrado') }
-        </span>
+        <section>
+          {
+            loading && <Loading />
+          }
+          {
+            (album.length > 0 && !loading)
+              ? (
+                <div>
+                  <h2>
+                    {`Resultado de álbuns de: ${nameArtist}` }
+                  </h2>
+                  <ListAlbum listAlbum={ album } />
+                </div>)
+              : (<span>{ strAlertNotAlbum }</span>)
+          }
+        </section>
       </div>
     );
-  }
-
-  async searchFunction() {
-    this.setState({ loading: true }, async () => {
-      const { valueInput } = this.state;
-      const returnAlbum = await searchAlbumsAPI(valueInput);
-      this.setState({ loading: false });
-      if (returnAlbum.length > 0) {
-        this.setState({
-          album: returnAlbum,
-          nameArtist: returnAlbum[0].artistName,
-          collectionName: returnAlbum[0].collectionName,
-        });
-      } else {
-        this.setState({ album: [], nameArtist: '' });
-      }
-    });
-  }
-
-  checkChar(event) {
-    const inptLength = event.target.value.length;
-    if (inptLength > 1) {
-      const inputChar = event.target.value;
-      this.setState({ valueInput: inputChar, disabledButt: false });
-    } else {
-      this.setState({ disabledButt: true });
-    }
-  }
-
-  render() {
-    return this.selectRender();
   }
 }

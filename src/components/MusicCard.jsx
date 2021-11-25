@@ -8,7 +8,9 @@ export default class MusicCard extends Component {
       trackId, trackName, deletMuscFavor } = this.props;
     return (
       <div>
-        <p data-testid="album-price">{ trackName }</p>
+        <div>
+          <p data-testid="album-price">{ trackName }</p>
+        </div>
         <label
           htmlFor={ trackId }
           value="Favorita"
