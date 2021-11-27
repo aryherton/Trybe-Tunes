@@ -13,7 +13,7 @@ export default class Search extends Component {
     this.state = {
       valueInput: '',
       nameArtist: '',
-      // collectionName: '',
+      strAlertNotAlbum: '',
       album: [],
       disabledButt: true,
       loading: false,
@@ -24,49 +24,47 @@ export default class Search extends Component {
   }
 
   async searchFunction() {
-    this.setState({ loading: true }, async () => {
-      const { valueInput } = this.state;
-      const returnAlbum = await searchAlbumsAPI(valueInput);
+    this.setState({ loading: true });
+    const { valueInput } = this.state;
+    const returnAlbum = await searchAlbumsAPI(valueInput);
 
-      if (returnAlbum.length > 0) {
-        this.setState({
-          album: returnAlbum,
-          nameArtist: returnAlbum[0].artistName,
-          // collectionName: returnAlbum[0].collectionName,
-          strAlertNotAlbum: '',
-        });
-      } else {
-        this.setState({
-          album: [],
-          nameArtist: '',
-          strAlertNotAlbum: 'Nenhum álbum foi encontrado' });
-      }
-    });
-    this.setState({ loading: false });
+    if (returnAlbum.length > 0) {
+      this.setState(() => ({
+        album: returnAlbum,
+      }));
+    } else {
+      this.setState(() => ({
+        strAlertNotAlbum: 'Nenhum álbum foi encontrado',
+      }));
+    }
+    this.setState({ loading: false, valueInput: '' });
   }
 
-  checkChar(event) {
-    const inptLength = event.target.value.length;
+  checkChar({ target: { value } }) {
+    this.setState({ nameArtist: value, valueInput: value });
 
-    if (inptLength > 1) {
-      const inputChar = event.target.value;
-      this.setState({ valueInput: inputChar, disabledButt: false });
+    if (value.length > 1) {
+      this.setState(() => ({ disabledButt: false }));
     } else {
       this.setState({ disabledButt: true });
     }
   }
 
   render() {
-    const { album, nameArtist, loading, disabledButt, strAlertNotAlbum } = this.state;
+    const {
+      album,
+      loading,
+      disabledButt, strAlertNotAlbum, nameArtist, valueInput } = this.state;
     return (
       <div data-testid="page-search" id="pageSearch">
         <Header />
         <form>
           <input
-            data-testid="search-artist-input"
             type="text"
+            data-testid="search-artist-input"
+            value={ valueInput }
+            placeholder="Busque por artistas ou banda"
             onChange={ this.checkChar }
-            placeholder="Search"
           />
           <button
             data-testid="search-artist-button"
