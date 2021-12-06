@@ -41,6 +41,7 @@ export default class Favorites extends Component {
     let newArr = await getFavoriteSongs();
     newArr = await newArr.filter((item) => item.trackId === Number(event.target.value));
     await removeSong(newArr[0]);
+    this.arrPageFavorites();
     this.setState({ checkloading: false });
   }
 
@@ -53,7 +54,7 @@ export default class Favorites extends Component {
           <p data-testid="artist-name">{artist}</p>
           <p data-testid="album-name">{collection}</p>
         </div>
-        { arrObjFavorite.length > 0 || !checkloading
+        { !checkloading
           ? (
             arrObjFavorite.map((musc) => (
               <section className="list-favorites" key={ musc.trackId }>

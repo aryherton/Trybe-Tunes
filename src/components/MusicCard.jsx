@@ -12,8 +12,7 @@ export default class MusicCard extends Component {
           <p data-testid="album-price">{ trackName }</p>
         </div>
         <label
-          htmlFor={ trackId }
-          value="Favorita"
+          htmlFor={ `input-favorite-${trackId}` }
         >
           <input
             type="checkbox"
@@ -24,6 +23,7 @@ export default class MusicCard extends Component {
             onClick={ deletMuscFavor }
             checked={ checkedFavorite }
           />
+          Favorita
         </label>
         <audio
           data-testid="audio-component"
