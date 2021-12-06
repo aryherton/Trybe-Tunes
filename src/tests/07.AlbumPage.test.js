@@ -41,7 +41,7 @@ describe('7 - Crie a lista de músicas do álbum selecionado', () => {
       { timeout: 3000 }
     );
 
-    const artistNameElement = screen.getByTestId('artist-name'); 
+    const artistNameElement = screen.getByTestId('artist-name');
     expect(artistNameElement).toBeInTheDocument();
     expect(artistNameElement).toHaveTextContent("Artist Name");
 

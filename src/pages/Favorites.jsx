@@ -46,7 +46,6 @@ export default class Favorites extends Component {
 
   render() {
     const { arrObjFavorite, artist, collection, checkloading } = this.state;
-    console.log(checkloading);
     return (
       <div data-testid="page-favorites">
         <Header />

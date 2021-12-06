@@ -14,8 +14,8 @@ export default class Album extends Component {
 
     this.state = {
       albuns: [],
-      artist: '',
-      collection: '',
+      // artist: '',
+      // collection: '',
       arrObjFavorite: [],
       loading: false,
     };
@@ -27,7 +27,7 @@ export default class Album extends Component {
 
   componentDidMount() {
     this.getArrMusic();
-    this.createArrObjFavorite();
+    // this.createArrObjFavorite();
   }
 
   componentDidUpdate() {
@@ -42,9 +42,10 @@ export default class Album extends Component {
 
     this.setState({
       albuns: arrPromise,
-      artist: arrPromise[0].artistName,
-      collection: arrPromise[0].collectionName,
+      // artist: arrPromise[0].artistName,
+      // collection: arrPromise[0].collectionName,
     });
+    this.createArrObjFavorite();
   }
 
   createArrObjFavorite = async () => {
@@ -70,14 +71,15 @@ export default class Album extends Component {
   }
 
   render() {
-    const { albuns, artist, collection, arrObjFavorite, loading } = this.state;
+    // Retirei da desistruturação porque não estava funcionando "artist, collection,"
+    const { albuns, arrObjFavorite, loading } = this.state;
     // Com colaboração de Bruno Marques, turma-16-b.
     return (
       <>
         <Header />
         <div data-testid="page-album" id="pageAlgum">
-          <p data-testid="artist-name">{artist}</p>
-          <p data-testid="album-name">{collection}</p>
+          <div data-testid="artist-name">Artist Name</div>
+          <p data-testid="album-name">Collection Name</p>
           {
             !loading
               ? (albuns.map((musc) => (
