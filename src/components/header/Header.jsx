@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import { getUser } from '../../services/userAPI';
 import Loading from '../Loading';
+
+import { HeaderWrapper } from './styled/headerStyled.js';
+import { logo02, userPng } from '../../image';
 
 export default class Header extends Component {
   constructor() {
@@ -27,11 +29,15 @@ export default class Header extends Component {
 
   selectRender() {
     const { renderLoading, nome } = this.state;
+
     if (renderLoading) {
       return <Loading />;
     }
     return (
-      <header className="header" data-testid="header-component">
+      <HeaderWrapper className="header" data-testid="header-component">
+        <div className="logoTop">
+          <img src={ logo02 } alt="logo-Trybe-Tunes" />
+        </div>
         <div className="div-user">
           <span
             data-testid="header-user-name"
@@ -39,32 +45,9 @@ export default class Header extends Component {
           >
             { nome }
           </span>
+          <img src={ userPng } alt="icon-user" />
         </div>
-        <nav className="header-ol-menu">
-          <ol className="header-ol">
-            <li>
-              <Link data-testid="link-to-search" to="/search">Pesquisar</Link>
-            </li>
-            |
-            <li>
-              <Link data-testid="link-to-favorites" to="/favorites">Favorito</Link>
-            </li>
-            |
-            <li>
-              <Link data-testid="link-to-profile" to="/profile">Perfil</Link>
-            </li>
-            |
-            <li>
-              <Link
-                to="/profile/edit"
-                data-testid="link-to-profile-edit"
-              >
-                Perfil-Edit
-              </Link>
-            </li>
-          </ol>
-        </nav>
-      </header>
+      </HeaderWrapper>
     );
   }
 
