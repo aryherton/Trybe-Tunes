@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 
-import Header from '../components/Header';
+import Header from '../components/header/Header';
 import Loading from '../components/Loading';
 import ListAlbum from '../components/ListAlbum';
 
