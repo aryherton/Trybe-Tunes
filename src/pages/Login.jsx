@@ -26,6 +26,7 @@ export default class Login extends Component {
   }
 
   getInput(event) {
+    event.preventDefault();
     const valNome = event.target.value;
     this.setState({ nome: valNome });
   }
