@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Login from './pages/Login';
+import Login from './pages/login/Login';
 import Search from './pages/search/Search';
 import Album from './pages/Album';
 import Favorites from './pages/Favorites';
