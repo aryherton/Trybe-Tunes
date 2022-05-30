@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
+
 import Loading from '../../components/Loading';
 import { createUser } from '../../services/userAPI';
+
 import { LoginWrapper } from './login';
+import { gifPageLogin, footerImgPagesLogin01 } from '../../image';
 
 export default class Login extends Component {
   constructor() {
@@ -37,23 +40,28 @@ export default class Login extends Component {
     const lengthName = 3;
     return (
       <LoginWrapper data-testid="page-login" id="page-login">
-        <h1>Login</h1>
-        <form>
-          <input
-            data-testid="login-name-input"
-            type="text"
-            placeholder="Nome"
-            onChange={ this.getInput }
-          />
-          <button
-            data-testid="login-submit-button"
-            type="button"
-            disabled={ nome.length < lengthName }
-            onClick={ this.setUser }
-          >
-            Entrar
-          </button>
-        </form>
+        <main>
+          <img src={ gifPageLogin } alt="gif-pages-login" id="gifPagesLogin"/>
+          <form>
+            <input
+              data-testid="login-name-input"
+              type="text"
+              placeholder="Digite seu nome"
+              onChange={ this.getInput }
+            />
+            <button
+              data-testid="login-submit-button"
+              type="button"
+              disabled={ nome.length < lengthName }
+              onClick={ this.setUser }
+            >
+              Entrar
+            </button>
+          </form>
+        </main>
+        <footer>
+          <img src={ footerImgPagesLogin01 } alt="img-trybeTunes-footer" />
+        </footer>
       </LoginWrapper>
     );
   }
