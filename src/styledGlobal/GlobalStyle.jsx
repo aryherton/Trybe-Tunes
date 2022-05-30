@@ -14,8 +14,8 @@ export const GlobalStyle = createGlobalStyle`
 
 export const theme = {
   colors: {
-    primary: '#E5E9F0',
-    secondary: '#FFFEFF',
+    primary: '#008000',
+    secondary: '#60703C',
     tertiary: '#2D2520',
     quaternary: '#6C6157',
   },
