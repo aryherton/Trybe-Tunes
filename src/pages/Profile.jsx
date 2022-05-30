@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 
-import Header from '../components/Header';
+import Header from '../components/header/Header';
 import Loading from '../components/Loading';
 
 export default class Profile extends Component {

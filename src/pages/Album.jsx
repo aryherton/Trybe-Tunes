@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import getMusics from '../services/musicsAPI';
 import { addSong, removeSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 
-import Header from '../components/Header';
+import Header from '../components/header/Header';
 import MusicCard from '../components/MusicCard';
 import Loading from '../components/Loading';
 

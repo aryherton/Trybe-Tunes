@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { removeSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 import Loading from '../components/Loading';
-import Header from '../components/Header';
+import Header from '../components/header/Header';
 import MusicCard from '../components/MusicCard';
 
 export default class Favorites extends Component {
