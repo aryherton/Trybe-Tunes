@@ -34,11 +34,13 @@ export const SearchWrapper = styled.div`
 
     input {
       width: 450px;
-      height: 40px;
+      height: 50px;
       background-color: yellow;
       margin-bottom: 40px;
       border-bottom: 2px solid #60703C;
       box-shadow: 0px 5px 15px 9px rgba(0, 0, 2, 0.5);
+      border-radius: 5px;
+      margin-top: 25px;
     }
 
     button {
