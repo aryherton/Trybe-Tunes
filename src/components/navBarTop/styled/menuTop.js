@@ -8,20 +8,31 @@ export const MenuTopWrapper = styled.nav`
   justify-content: center;
   ol {
     display: flex;
-    width: 60%;
+    width: 80%;
     justify-content: space-around;
     align-items: center;
     list-style: none;
     background-color: transparent;
+    margin-top: 15px;
+    
+    li:hover {
+      background-color: greenyellow;
+      width: 245px;
+
+      a {
+        color: #000000;
+        font-size: 1.1rem;
+      }
+    }
 
     li {
-      width: 100%;
+      width: 240px;
       height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       background-color: transparent;
-      border: 2px solid yellow;
+      border: 1px solid yellow;
       border-radius: 10px;
       background-color: green;
 
